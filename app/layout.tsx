@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins } from 'next/font/google';
+import { Poppins } from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -9,7 +9,7 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "My Drive",
+  title: "MyDrive",
   description: "MyDrive - The pookie version of Google Drive",
 };
 
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${poppins.variable} font-poppins antialiased`}>
         {children}
       </body>
