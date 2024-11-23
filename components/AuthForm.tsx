@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { createAccount } from "@/lib/actions/user.action";
+import OTPModal from "./OTPModal";
 
 
 
@@ -27,7 +29,8 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: { type: FormType }) => {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [accountId, setAccountId] = useState(null);
 
   const formSchema = authFormSchema(type);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,8 +40,18 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const user = await createAccount({ fullName: values.fullName || "", email: values.email });
+      setAccountId(user.accountId);
+    } catch (error) {
+      setErrorMessage("Failed to create an account, Please try again!");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -75,8 +88,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
                 </div>
                 <FormMessage className="shad-form-message" />
               </FormItem>
-            )}
-          />
+            )} />
           <Button disabled={isLoading} type="submit" className="form-submit-button">{type === 'sign-in' ? "Sign In" : "Sign Up"} {isLoading && (<Image src="/assets/icons/loader.svg" alt="loader" width={24} height={24} className="animate-spin ml-2" />)}</Button>
           {errorMessage && (<p className="error-message">*{errorMessage}</p>)}
           <div className="body-2 flex justify-center">
@@ -85,6 +97,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </div>
         </form>
       </Form>
+
+      {accountId && <OTPModal accountId={accountId} email = {form.getValues("email")} />}
+
+
     </>
   )
 }
