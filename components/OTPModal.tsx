@@ -74,14 +74,12 @@ const OTPModal = ({ accountId, email }: { accountId: string, email: string }) =>
 
                 <AlertDialogFooter>
                     <div className="flex w-full flex-col gap-4">
-                        <AlertDialogAction className="shad-submit-btn h-12" onClick={handleSubmit} type="button">
-                            Submit
+                        <AlertDialogAction className="shad-submit-btn h-12" onClick={handleSubmit} type="button">Submit
                             {isLoading && (<Image src="/assets/icons/loader.svg" alt="loader" width={24} height={24} className="ml-2 animate-spin" />)}
                         </AlertDialogAction>
                         <div className="subtitle-2 mt-2 text-center text-light-100">Didn't get a code ?
                             <Button type="button" variant="link" className="text-brand font-medium pl-1" onClick={handleResendOtp}>Click to resend</Button>
                         </div>
-
                     </div>
                 </AlertDialogFooter>
             </AlertDialogContent>
